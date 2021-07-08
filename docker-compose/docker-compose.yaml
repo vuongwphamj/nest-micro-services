@@ -1,0 +1,88 @@
+version: "3"
+
+services:
+    nab-customer-service:
+        image: "nab-customer-service:dev"
+        build:
+            context: "../"
+            dockerfile: ./nab-customer-service/Dockerfile
+        expose:
+            - "3000" # nab-product-service
+            - "3306" # mysql-db
+            - "4000" # nab-customer-service
+        depends_on:
+          - "mysql-db"
+        environment:
+            HOST: nab-customer-service
+            PORT: 4000
+            MYSQL_HOST: mysql-db
+            MYSQL_PORT: 3306
+            MYSQL_USERNAME: root
+            MYSQL_PASSWORD: admin
+            MYSQL_DATABASE: nab-customer-service
+        ports:
+            - 4000:4000
+        networks:
+            - "nab-customer-service"
+            - "nab-product-service"
+            - "mysql-db"
+        restart: "on-failure"
+    nab-product-service:
+        image: "nab-product-service:dev"
+        build:
+            context: "../"
+            dockerfile: ./nab-product-service/Dockerfile
+        expose:
+            - "3000" # nab-product-service
+            - "3306" # mysql-db
+            - "4000" # nab-customer-service
+        depends_on:
+          - "mysql-db"
+        networks:
+            - "nab-customer-service"
+            - "nab-product-service"
+            - "mysql-db"
+        environment:
+            PORT: 3000
+            CUSTOMER_SERVICE_HOST: nab-customer-service
+            CUSTOMER_SERVICE_PORT: 4000
+            MYSQL_HOST: mysql-db
+            MYSQL_PORT: 3306
+            MYSQL_USERNAME: root
+            MYSQL_PASSWORD: admin
+            MYSQL_DATABASE: nab-product-service
+        ports:
+            - 3000:3000
+        restart: "on-failure"
+    mysql-db:
+        image: mysql
+        command: --default-authentication-plugin=mysql_native_password
+        restart: always
+        environment:
+            MYSQL_ROOT_PASSWORD: admin
+            MYSQL_USER: username
+            MYSQL_PASSWORD: password
+        ports:
+            - 3306:3306
+        networks:
+            - "nab-customer-service"
+            - "nab-product-service"
+            - "mysql-db"
+        volumes:
+            - ./mysql-init-files:/docker-entrypoint-initdb.d
+    
+    adminer:
+        image: adminer
+        restart: always
+        ports:
+            - 8080:8080
+        depends_on:
+            - "mysql-db"
+        networks:
+            - "nab-customer-service"
+            - "nab-product-service"
+
+networks:
+    nab-product-service:
+    nab-customer-service:
+    mysql-db:

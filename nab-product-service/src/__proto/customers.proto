@@ -1,0 +1,34 @@
+// cutomer/cutomer.proto
+syntax = "proto3";
+
+package customers;
+
+service CustomerAnalysisService {
+  rpc GetPromotions (GetPromotionsRequest) returns (GetPromotionsResponse) {}
+}
+
+message PromotionData {
+  string id = 1;
+  string name = 2;
+  string desciption = 3;  
+}
+
+message PromotionResponseData {
+  string customerId = 1;
+  string productId = 2;
+  repeated PromotionData promotions = 3;
+}
+
+message GetPromotionsRequest {
+  string customerId = 1;
+  string productId = 2;
+  string requestId = 3;
+}
+
+message GetPromotionsResponse {
+  int32 statusCode = 1;
+  string message = 2;
+  string requestId = 3;
+
+  PromotionResponseData data = 4;
+}
