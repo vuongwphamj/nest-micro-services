@@ -12,14 +12,14 @@ Project is a e-commerce service includes:
 - ...
 
 ## Index
-- [Installation](##Installation)
-- [Architecture](##Architecture)
-- [Source Code Structure](#Source-Code-Structure)
-- [Run Project](#Run-Project)
-- [DB Admin Page](##DB-Admin-Page)
-- [Workflows](##Workflows)
-- [Notes](##Notes)
-- [P.S](##P.s)
+- [Installation](##installation)
+- [Architecture](##architecture)
+- [Source Code Structure](#source-code-structure)
+- [Run Project](#run-project)
+- [DB Admin Page](##db-admin-page)
+- [Workflows](##workflows)
+- [Notes](##notes)
+- [P.S](##ps)
 - .
 
 
